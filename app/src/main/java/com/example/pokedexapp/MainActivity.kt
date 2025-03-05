@@ -1,4 +1,3 @@
-// MainActivity.kt
 package com.example.pokedexapp
 
 import android.os.Bundle
@@ -17,7 +16,6 @@ import com.example.pokedexapp.ui.theme.PokemonListScreen
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Instancia el Repository usando Retrofit
         val repository = PokemonRepository(RetrofitInstance.api)
         setContent {
             MaterialTheme {
@@ -25,7 +23,6 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
                     NavHost(navController = navController, startDestination = "list") {
                         composable("list") {
-                            // Usa la pantalla de lista que navega al detalle extendido
                             PokemonListScreen(navController = navController, repository = repository)
                         }
                         composable("detail/{pokemonId}") { backStackEntry ->

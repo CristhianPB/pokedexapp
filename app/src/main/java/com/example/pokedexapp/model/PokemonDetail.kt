@@ -1,4 +1,3 @@
-// PokemonDetail.kt
 package com.example.pokedexapp.model
 
 data class NamedAPIResource(

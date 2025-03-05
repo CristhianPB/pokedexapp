@@ -24,13 +24,11 @@ fun PokemonListScreen(
     navController: NavController,
     repository: PokemonRepository
 ) {
-    // Se ha modificado el ViewModel para que, en el Repository, se soliciten más Pokémon (por ejemplo, 1000)
     val viewModel: PokemonViewModel = viewModel(
         factory = PokemonViewModelFactory(repository)
     )
     val uiState by viewModel.uiState.collectAsState()
 
-    // Estado para la búsqueda
     var searchQuery by remember { mutableStateOf("") }
 
     Scaffold(
@@ -38,13 +36,11 @@ fun PokemonListScreen(
             TopAppBar(title = { Text("Pokedex") })
         }
     ) { paddingValues ->
-        // Contenido principal en una Column: primero la búsqueda, luego la lista
         Column(
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
         ) {
-            // Barra de búsqueda centrada y con padding
             OutlinedTextField(
                 value = searchQuery,
                 onValueChange = { searchQuery = it },
@@ -54,7 +50,6 @@ fun PokemonListScreen(
                     .padding(16.dp)
             )
             Spacer(modifier = Modifier.height(8.dp))
-            // Mostrar contenido según estado
             Box(modifier = Modifier.fillMaxSize()) {
                 when (uiState) {
                     is UiState.Loading -> {
@@ -68,7 +63,6 @@ fun PokemonListScreen(
                     }
                     is UiState.Success -> {
                         val pokemonList = (uiState as UiState.Success).pokemonList
-                        // Filtrar la lista según el texto de búsqueda
                         val filteredList = if (searchQuery.isEmpty()) pokemonList
                         else pokemonList.filter { it.name.contains(searchQuery, ignoreCase = true) }
 

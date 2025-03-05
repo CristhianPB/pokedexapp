@@ -110,7 +110,6 @@ fun PokemonFullDetailScreen(
                             Column(modifier = Modifier.padding(16.dp)) {
                                 Text(text = "Abilities:", style = MaterialTheme.typography.h6)
                                 detail.abilities.forEach { ability ->
-                                    // Usa un color especial para la habilidad oculta
                                     val abilityColor =
                                         if (ability.is_hidden) Color.Magenta else MaterialTheme.colors.onSurface
                                     Text(
@@ -123,7 +122,7 @@ fun PokemonFullDetailScreen(
 
                         Spacer(modifier = Modifier.height(16.dp))
 
-                        // Stats con color según su valor
+                        // Stats
                         Card(
                             elevation = 8.dp,
                             modifier = Modifier.fillMaxWidth()
@@ -146,7 +145,7 @@ fun PokemonFullDetailScreen(
 
                         Spacer(modifier = Modifier.height(16.dp))
 
-                        // Types
+                        // Tipos
                         Card(
                             elevation = 8.dp,
                             modifier = Modifier.fillMaxWidth()
@@ -161,7 +160,7 @@ fun PokemonFullDetailScreen(
 
                         Spacer(modifier = Modifier.height(16.dp))
 
-                        // Egg Groups de la especie
+                        // Grupo huevo
                         Card(
                             elevation = 8.dp,
                             modifier = Modifier.fillMaxWidth()
