@@ -1,39 +1,44 @@
+// MainActivity.kt
 package com.example.pokedexapp
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import com.example.pokedexapp.network.RetrofitInstance
-import com.example.pokedexapp.repository.PokemonRepository
-import com.example.pokedexapp.viewmodel.PokemonViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider.Factory
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.pokedexapp.network.RetrofitInstance
+import com.example.pokedexapp.repository.PokemonRepository
+import com.example.pokedexapp.ui.theme.PokemonFullDetailScreen
 import com.example.pokedexapp.ui.theme.PokemonListScreen
-
-class PokemonViewModelFactory(private val repository: PokemonRepository) : Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(PokemonViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return PokemonViewModel(repository) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
-    }
-}
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Instancia el Repository usando Retrofit
         val repository = PokemonRepository(RetrofitInstance.api)
-        val viewModelFactory = PokemonViewModelFactory(repository)
-        val viewModel = ViewModelProvider(this, viewModelFactory)[PokemonViewModel::class.java]
-
         setContent {
             MaterialTheme {
                 Surface {
-                    PokemonListScreen(viewModel = viewModel)
+                    val navController = rememberNavController()
+                    NavHost(navController = navController, startDestination = "list") {
+                        composable("list") {
+                            // Usa la pantalla de lista que navega al detalle extendido
+                            PokemonListScreen(navController = navController, repository = repository)
+                        }
+                        composable("detail/{pokemonId}") { backStackEntry ->
+                            val pokemonId = backStackEntry.arguments?.getString("pokemonId")?.toIntOrNull()
+                            if (pokemonId != null) {
+                                PokemonFullDetailScreen(
+                                    pokemonId = pokemonId,
+                                    navController = navController,
+                                    repository = repository
+                                )
+                            }
+                        }
+                    }
                 }
             }
         }

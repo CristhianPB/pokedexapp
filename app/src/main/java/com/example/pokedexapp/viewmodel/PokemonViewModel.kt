@@ -8,7 +8,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-// Estados de la UI
 sealed class UiState {
     object Loading : UiState()
     data class Success(val pokemonList: List<Pokemon>) : UiState()
@@ -27,7 +26,7 @@ class PokemonViewModel(private val repository: PokemonRepository) : ViewModel() 
     private fun fetchPokemonList() {
         viewModelScope.launch {
             try {
-                val list = repository.getPokemonList(151)
+                val list = repository.getPokemonList(1025)
                 _uiState.value = UiState.Success(list)
             } catch (e: Exception) {
                 _uiState.value = UiState.Error(e.message ?: "Error desconocido")
